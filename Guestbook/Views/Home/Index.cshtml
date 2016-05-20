@@ -1,31 +1,259 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model List<Guestbook.Models.Comment>
+@{
+	Layout = null;
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<title>Faceboot - A Facebook style template for Bootstrap</title>
+	<meta name="generator" content="Bootply" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+	<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+	<link href="~/Content/styles.css" rel="stylesheet" />
+	<!--[if lt IE 9]>
+		<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="box">
+			<div class="row row-offcanvas row-offcanvas-left">
+
+				<!-- main right col -->
+				<div class="column col-sm-12 col-xs-12" id="main">
+
+					<!-- top nav -->
+					<div class="navbar navbar-blue navbar-static-top">
+						<div class="navbar-header">
+							<button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+								<span class="sr-only">Toggle</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+							<a href="/" class="navbar-brand logo">IM</a>
+						</div>
+						<nav class="collapse navbar-collapse" role="navigation">
+							<form class="navbar-form navbar-left">
+								<div class="input-group input-group-sm" style="max-width:360px;">
+									<input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+									<div class="input-group-btn">
+										<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+									</div>
+								</div>
+							</form>
+							<ul class="nav navbar-nav">
+								<li>
+									<a href="#"><i class="glyphicon glyphicon-home"></i> Home</a>
+								</li>
+
+
+
+							</ul>
+							<ul class="nav navbar-nav navbar-right">
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
+									<ul class="dropdown-menu">
+										<li><a href="">Logout</a></li>
+									</ul>
+								</li>
+								<li>
+									<a href="#loginModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Login</a>
+								</li>
+								<li>
+									<a href="#registerModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Register</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+					<!-- /top nav -->
+
+					<div class="padding">
+						<div class="full col-sm-12">
+
+							<!-- content -->
+							<div class="row">
+								<div class="col-lg-5">
+									<!-- main col left -->
+									<div class="col-sm-12">
+										<div class="well">
+
+											<h4>What's New</h4>
+											<div class="form-group" style="padding:14px;">
+												<textarea class="form-control" id="PostMessage" placeholder="Update your status"></textarea>
+											</div>
+											<button class="btn btn-primary pull-right" id="postComment" type="button">Post</button><ul class="list-inline"><li><a href=""><i class="glyphicon glyphicon-upload"></i></a></li><li><a href=""><i class="glyphicon glyphicon-camera"></i></a></li><li><a href=""><i class="glyphicon glyphicon-map-marker"></i></a></li></ul>
+
+										</div>
+
+									</div>
+								</div>
+								<div class="col-lg-7">
+									<!-- main col right -->
+									<div id="comment"></div>
+									@foreach (var comm in Model)
+									{
+										@Html.Partial("Comment",comm)
+									}
+									@*@Html.Partial("Comment")*@
+
+								</div>
+							</div><!--/row-->
+
+
+
+							<div class="row" id="footer">
+								<div class="col-sm-6">
+
+								</div>
+								<div class="col-sm-6">
+									<p>
+										<a href="#" class="pull-right">©Copyright 2013</a>
+									</p>
+								</div>
+							</div>
+
+						</div><!-- /col-9 -->
+					</div><!-- /padding -->
+				</div>
+				<!-- /main -->
+
+			</div>
+		</div>
+	</div>
+
+	<!--register modal-->
+	<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title" id="myModalLabel">Register</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-12">
+
+							<form id="register-form" action="@Url.Action("Register")" method="post" role="form">
+								<div class="form-group">
+									<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+								</div>
+								<div class="form-group">
+									<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
+								</div>
+								<div class="form-group">
+									<input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+								</div>
+								<div class="form-group">
+									<input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+								</div>
+								<div class="form-group">
+									<div class="row">
+										<div class="col-sm-6 col-sm-offset-3">
+											<input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-primary" value="Register Now">
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div>
+	<!--login modal-->
+	<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title" id="myModalLabel">Login</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-12">
+
+							<form id="register-form" action="http://phpoll.com/register/process" method="post" role="form">
+								<div class="form-group">
+									<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+								</div>
+
+								<div class="form-group">
+									<input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+								</div>
+
+								<div class="form-group">
+									<div class="row">
+										<div class="col-sm-6 col-sm-offset-3">
+											<input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-success" value="Login">
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div>
+	<!--modify-->
+	<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title" id="myModalLabel">Update Message</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-12">
+
+							<form id="register-form" action="http://phpoll.com/register/process" method="post" role="form">
+								<div class="form-group">
+									<input type="text" tabindex="1" class="form-control editMessage" placeholder="Message.." value="">
+								</div>
+
+								<div class="form-group">
+									<div class="row">
+										<div class="col-sm-6 col-sm-offset-3">
+											<input type="button" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-success modify" value="Updete">
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div>
+	<!-- script references -->
+
+	<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+	<script src="~/Scripts/bootstrap.min.js"></script>
+	<script src="js/scripts.js"></script>
+</body>
+</html>
+
+<script>
+	$(document).on('click','#postComment', function () {
+		var message = $('#PostMessage').val();
+		$.ajax({
+			type: "POST",
+			url: "@Url.Action("PostComment")",
+			data: { message :message},
+			dataType: "html",
+			success: function (response) {
+				console.log(response);
+				$('#comment').prepend(response);
+			}
+		});
+	});
+</script>

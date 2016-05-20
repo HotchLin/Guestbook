@@ -1,0 +1,43 @@
+﻿@model Guestbook.Models.Comment
+@{
+	Layout = null;
+}
+
+<div class="col-sm-12">
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+
+			<div class="dropdown pull-right">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-chevron-down"></i></a>
+				<ul class="dropdown-menu">
+					<li>
+						<a href="#editModal" role="button" data-toggle="modal"></i> Edit</a>
+					</li>
+					<li><a href="javascript: void(0);">Delete</a></li>
+
+				</ul>
+			</div>
+			<h4>Stackoverflow</h4>
+		</div>
+		<div class="panel-body">
+			@Model.Message
+			<div class="clearfix"></div>
+			<hr>
+			<form>
+				<div class="input-group">
+					<div class="input-group-btn">
+						<button class="btn btn-default">+1</button><button class="btn btn-default"><i class="glyphicon glyphicon-share"></i></button>
+					</div>
+					<input type="text" class="form-control" placeholder="Add a comment..">
+				</div>
+			</form>
+			@*@Html.Partial("CommentReply")*@
+
+
+		</div>
+
+
+	</div>
+
+</div>
