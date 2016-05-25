@@ -18,6 +18,11 @@ namespace Guestbook.Models
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
+			// 關聯性刪除，刪除留言連同回覆留言也一併刪除
+			modelBuilder.Entity<Comment>()
+			.HasMany(x => x.CommentReply)
+			.WithRequired(x => x.Comment)
+			.WillCascadeOnDelete();
 
 		}
 	}

@@ -1,5 +1,6 @@
 ﻿@model List<Guestbook.Models.Comment>
 @{
+	//不套用 ..\Shared\_Layout.cshtml的樣式
 	Layout = null;
 }
 <!DOCTYPE html>
@@ -50,15 +51,14 @@
 								<li>
 									<a href="#"><i class="glyphicon glyphicon-home"></i> Home</a>
 								</li>
-
-
-
 							</ul>
 							<ul class="nav navbar-nav navbar-right">
 								<li class="dropdown">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> @(ViewData["username"] != null ? ViewData["username"].ToString() : "Guest")</a>
 									<ul class="dropdown-menu">
-										<li><a href="">Logout</a></li>
+										<li>
+											@Html.ActionLink("Logout", "Logout")
+										</li>
 									</ul>
 								</li>
 								<li>
@@ -81,13 +81,11 @@
 									<!-- main col left -->
 									<div class="col-sm-12">
 										<div class="well">
-
 											<h4>What's New</h4>
 											<div class="form-group" style="padding:14px;">
-												<textarea class="form-control" id="PostMessage" placeholder="Update your status"></textarea>
+												<textarea class="form-control" id="textComment" placeholder="Update your status"></textarea>
 											</div>
 											<button class="btn btn-primary pull-right" id="postComment" type="button">Post</button><ul class="list-inline"><li><a href=""><i class="glyphicon glyphicon-upload"></i></a></li><li><a href=""><i class="glyphicon glyphicon-camera"></i></a></li><li><a href=""><i class="glyphicon glyphicon-map-marker"></i></a></li></ul>
-
 										</div>
 
 									</div>
@@ -95,24 +93,18 @@
 								<div class="col-lg-7">
 									<!-- main col right -->
 									<div id="comment"></div>
-									@foreach (var comm in Model)
+									@foreach (var comment in Model)
 									{
-										@Html.Partial("Comment",comm)
+										@Html.Partial("Comment", comment)
 									}
-									@*@Html.Partial("Comment")*@
-
 								</div>
 							</div><!--/row-->
-
-
-
 							<div class="row" id="footer">
 								<div class="col-sm-6">
-
 								</div>
 								<div class="col-sm-6">
 									<p>
-										<a href="#" class="pull-right">©Copyright 2013</a>
+										<a href="#" class="pull-right">©Copyright 2016</a>
 									</p>
 								</div>
 							</div>
@@ -121,7 +113,6 @@
 					</div><!-- /padding -->
 				</div>
 				<!-- /main -->
-
 			</div>
 		</div>
 	</div>
@@ -166,6 +157,7 @@
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
 	</div>
+
 	<!--login modal-->
 	<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
@@ -178,7 +170,7 @@
 					<div class="row">
 						<div class="col-lg-12">
 
-							<form id="register-form" action="http://phpoll.com/register/process" method="post" role="form">
+							<form id="login-form" action="@Url.Action("Login")" method="post" role="form">
 								<div class="form-group">
 									<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
 								</div>
@@ -190,7 +182,7 @@
 								<div class="form-group">
 									<div class="row">
 										<div class="col-sm-6 col-sm-offset-3">
-											<input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-success" value="Login">
+											<input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-success" value="Login">
 										</div>
 									</div>
 								</div>
@@ -202,7 +194,8 @@
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
 	</div>
-	<!--modify-->
+
+	<!--edit modal-->
 	<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
@@ -213,20 +206,17 @@
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-lg-12">
+							<div class="form-group">
+								<input id="editMessage" type="text" tabindex="1" class="form-control editMessage" placeholder="Message.." value="">
+							</div>
 
-							<form id="register-form" action="http://phpoll.com/register/process" method="post" role="form">
-								<div class="form-group">
-									<input type="text" tabindex="1" class="form-control editMessage" placeholder="Message.." value="">
-								</div>
-
-								<div class="form-group">
-									<div class="row">
-										<div class="col-sm-6 col-sm-offset-3">
-											<input type="button" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-success modify" value="Updete">
-										</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-sm-6 col-sm-offset-3">
+										<input type="button" tabindex="4" class="form-control btn btn-success update" value="Updete">
 									</div>
 								</div>
-							</form>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -234,26 +224,95 @@
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
 	</div>
-	<!-- script references -->
 
+
+	<!-- script references -->
 	<script src="~/Scripts/jquery-1.10.2.min.js"></script>
 	<script src="~/Scripts/bootstrap.min.js"></script>
-	<script src="js/scripts.js"></script>
 </body>
 </html>
 
 <script>
-	$(document).on('click','#postComment', function () {
-		var message = $('#PostMessage').val();
+	// 新增留言
+	$(document).on('click', '#postComment', function () {
+		var message = $('#textComment').val();
 		$.ajax({
 			type: "POST",
 			url: "@Url.Action("PostComment")",
-			data: { message :message},
+			data: { message: message },
 			dataType: "html",
 			success: function (response) {
-				console.log(response);
+
 				$('#comment').prepend(response);
+				$('#textComment').val('');
+			}
+		});
+
+	});
+
+	// 新增回覆留言
+	$(document).on('keydown', '.postCommendReply', function (e) {
+		var current = $(this);
+		// 按下Enter
+		if (e.keyCode == 13) {
+			var commentid = current.data("commentid");
+			var replayMessage = $('#postCommendReply_' + commentid).val();
+
+			$.ajax({
+				type: "POST",
+				url: "@Url.Action("PostCommentReply")",
+				data: { replyMessage: replayMessage, commentid: commentid },
+				dataType: "html",
+				success: function (response) {
+
+					$('#commentReply_' + commentid).append(response);
+					$('#postCommendReply_' + commentid).val('');
+				}
+			});
+		}
+	});
+
+	// 刪除留言
+	$(document).on('click', '.deleteComment', function () {
+		var current = $(this);
+		var commentId = current.data("commentid");
+		$.ajax({
+			type: "POST",
+			url: "@Url.Action("DeleteComment")",
+			data: { commentId: commentId },
+			dataType: "JSON",
+			success: function (response) {
+				$('#comment_' + commentId).remove();
 			}
 		});
 	});
+
+	// 修改留言
+	$(document).on('click', '.editComment', function () {
+
+		var current = $(this);
+		commentid = current.data("commentid");
+		$('#editModal').modal('show');
+
+		$(document).one('click', '.update', function () {
+
+			var editMessage = $('.editMessage').val();
+
+			$.ajax({
+				type: "POST",
+				url: "@Url.Action("EditComment")",
+				data: { commentId: commentid, message: editMessage },
+				dataType: "html",
+				success: function (response) {
+					$('#commentMessage_' + commentid).text(response);
+					$('#editModal').modal('hide');
+					$('#editMessage').val('');
+				}
+			});
+
+		});
+	});
+
+
+
 </script>

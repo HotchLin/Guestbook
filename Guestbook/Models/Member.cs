@@ -19,7 +19,7 @@ namespace Guestbook.Models
         public int MemberId { get; set; }
 
         [StringLength(50)]
-        public string Uesrname { get; set; }
+        public string Username { get; set; }
 
         [StringLength(50)]
         public string Password { get; set; }

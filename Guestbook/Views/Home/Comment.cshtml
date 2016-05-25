@@ -3,41 +3,37 @@
 	Layout = null;
 }
 
-<div class="col-sm-12">
-
+<div id="comment_@(Model.CommentId)" class="col-sm-12">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-
 			<div class="dropdown pull-right">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-chevron-down"></i></a>
 				<ul class="dropdown-menu">
-					<li>
-						<a href="#editModal" role="button" data-toggle="modal"></i> Edit</a>
-					</li>
-					<li><a href="javascript: void(0);">Delete</a></li>
-
+					<li><a href="javascript: void(0);" data-commentid="@Model.CommentId" class="editComment"> Edit</a></li>
+					<li><a href="javascript: void(0);" data-commentid="@Model.CommentId" class="deleteComment"> Delete</a></li>
 				</ul>
 			</div>
-			<h4>Stackoverflow</h4>
+			<h4>@Model.Member.Username</h4>
 		</div>
 		<div class="panel-body">
-			@Model.Message
+			<div id="commentMessage_@(Model.CommentId)">
+				@Model.Message
+			</div>
 			<div class="clearfix"></div>
 			<hr>
-			<form>
-				<div class="input-group">
-					<div class="input-group-btn">
-						<button class="btn btn-default">+1</button><button class="btn btn-default"><i class="glyphicon glyphicon-share"></i></button>
-					</div>
-					<input type="text" class="form-control" placeholder="Add a comment..">
+			<div class="input-group">
+				<div class="input-group-btn">
+					<button class="btn btn-default">+1</button><button class="btn btn-default"><i class="glyphicon glyphicon-share"></i></button>
 				</div>
-			</form>
-			@*@Html.Partial("CommentReply")*@
+				<input id="postCommendReply_@(Model.CommentId)" data-commentid="@Model.CommentId" type="text" class="form-control postCommendReply" placeholder="Add a comment..">
+			</div>
+			
 
-
+			@foreach (var commsntReply in Model.CommentReply)
+			{
+				@Html.Partial("CommentReply", commsntReply)
+			}
+			<div id="commentReply_@(Model.CommentId)"></div>
 		</div>
-
-
 	</div>
-
 </div>
